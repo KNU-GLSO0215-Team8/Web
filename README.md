@@ -67,5 +67,4 @@
 
 ---
 
-> 개발자: @yourname  
 > Powered by GCP + PHP + solved.ac API + vis-network.js
