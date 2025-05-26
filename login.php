@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+<h1 class="main-title">하루한문제📌</h1>
 <div class="container">
     <h2>로그인</h2>
     <?php if (isset($error)) echo "<p style='color:red; text-align:center;'>$error</p>"; ?>
