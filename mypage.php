@@ -73,11 +73,11 @@ foreach ($recentProblems as $problemId) {
 </head>
 <body>
 <nav>
-    <a href="dashboard.php">Dashboard</a>
-    <a href="mypage.php">내 solved.ac 정보</a>
-    <a href="recommend.php">문제 추천</a>
-    <a href="graph.php">자료구조 시각화</a>
-    <a href="logout.php">로그아웃</a>
+    <a href="<?php echo $URLS['dashboard']; ?>">Dashboard</a>
+    <a href="mypage">내 solved.ac 정보</a>
+    <a href="recommand">문제 추천</a>
+    <a href="graph">자료구조 시각화</a>
+    <a href="<?php echo $URLS['logout']; ?>">로그아웃</a>
 </nav>
 
 <div class="container">
