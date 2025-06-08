@@ -23,24 +23,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>로그인</title>
-    <link rel="stylesheet" href="assets/style.css">
+  <meta charset="UTF-8">
+  <title>하루한문제</title>
+  <link rel="stylesheet" href="assets/login-style.css">
 </head>
 <body>
+
 <div class="container">
-    <h2>로그인</h2>
+    <div class="left">
+        <div class="title">하루한문제</div>
+        <div class="slogan">
+            <p>하루한문제와 함께</p>
+            <p>알고리즘 공부!</p>
+        </div>
+    </div>
     <?php if (isset($error)) echo "<p style='color:red; text-align:center;'>$error</p>"; ?>
-    <form method="POST">
-        <label>아이디</label>
-        <input type="text" name="username" required>
-
-        <label>비밀번호</label>
-        <input type="password" name="password" required>
-
-        <input type="submit" value="로그인">
-    </form>
-    <a href="register.php" class="button">회원가입 →</a>
+    <div class="login-box"> 
+        <form method="post">
+            <h2>로그인</h2>
+            <input type="text" name="username" placeholder="아이디" required>
+            <input type="password" name="password" placeholder="비밀번호" required>
+            <input type="submit" name="submit" value="로그인">
+        </form>
+    <a href="register.php" class="button">회원가입!</a>
+    </div>
 </div>
 </body>
 </html>
