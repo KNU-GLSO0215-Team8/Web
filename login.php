@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+<h1 class="main-title">하루한문제📌</h1>
 <div class="container">
     <div class="left">
         <div class="title">하루한문제</div>
