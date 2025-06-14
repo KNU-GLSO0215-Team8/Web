@@ -35,15 +35,6 @@ function getRecommendedTierRange($tier) {
 }
 list($minTier, $maxTier) = getRecommendedTierRange($userTier);
 
-// 사용자 푼 문제 목록
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "https://solved.ac/api/v3/user/solved_problems?handle=$handle");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
-$solvedData = json_decode($response, true);
-$solvedProblems = array_column($solvedData['items'] ?? [], 'problemId');
-
 // 추천 후보 문제 목록 (난이도 기반)
 $query = urlencode("tier:$minTier..$maxTier");
 $ch = curl_init();
@@ -66,11 +57,10 @@ foreach ($problems['items'] ?? [] as $problem) {
 // Gemini에게 보낼 데이터
 $payload = [
     'user_tier' => $userTier,
-    'solved' => $solvedProblems,
     'candidates' => $candidateProblems
 ];
 
-$prompt = "다음은 사용자 티어와 푼 문제 목록, 그리고 추천 후보 문제 리스트입니다. 
+$prompt = "다음은 사용자 티어와 그리고 추천 후보 문제 리스트입니다. 
 사용자가 아직 풀지 않은 문제 중에서 난이도와 다양성을 고려해 5개의 문제를 추천해주세요. 
 결과는 문제 ID만 담긴 JSON 배열로 출력해주세요.";
 
