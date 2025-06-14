@@ -3,7 +3,8 @@ require 'includes/auth.php';
 require 'includes/db.php';
 
 // Gemini API 키 설정
-$GEMINI_API_KEY = 'AIzaSyAM-a0EzVwespoNpp68o4mItxcSY2rDAuw'; // ← 여기에 본인의 키 입력
+$GEMINI_API_KEY = 'AIzaSyCYdKks8Tbp3SOajO9oNkoTOjemi4AvaL0';
+$MODEL = 'models/gemini-2.0-flash';
 
 // 사용자 handle 가져오기
 $stmt = $conn->prepare("SELECT baekjoon_handle FROM users WHERE id = ?");
@@ -35,7 +36,7 @@ function getRecommendedTierRange($tier) {
 }
 list($minTier, $maxTier) = getRecommendedTierRange($userTier);
 
-// 추천 후보 문제 목록 (난이도 기반)
+// 추천 후보 문제 목록
 $query = urlencode("tier:$minTier..$maxTier");
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "https://solved.ac/api/v3/search/problem?query=$query&page=1");
@@ -44,7 +45,7 @@ $response = curl_exec($ch);
 curl_close($ch);
 $problems = json_decode($response, true);
 
-// 후보 문제 배열 정리
+// 후보 문제 배열
 $candidateProblems = [];
 foreach ($problems['items'] ?? [] as $problem) {
     $candidateProblems[] = [
@@ -54,18 +55,17 @@ foreach ($problems['items'] ?? [] as $problem) {
     ];
 }
 
-// Gemini에게 보낼 데이터
+// Gemini 프롬프트 생성
 $payload = [
     'user_tier' => $userTier,
     'candidates' => $candidateProblems
 ];
-
-$prompt = "다음은 사용자 티어와 그리고 추천 후보 문제 리스트입니다. 
-사용자가 아직 풀지 않은 문제 중에서 난이도와 다양성을 고려해 5개의 문제를 추천해주세요. 
+$prompt = "다음은 사용자 티어와 그리고 추천 후보 문제 리스트입니다.
+사용자가 아직 풀지 않은 문제 중에서 난이도와 다양성을 고려해 5개의 문제를 추천해주세요.
 결과는 문제 ID만 담긴 JSON 배열로 출력해주세요.";
 
 // Gemini API 호출
-$ch = curl_init("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$GEMINI_API_KEY");
+$ch = curl_init("https://generativelanguage.googleapis.com/v1beta/$MODEL:generateContent?key=$GEMINI_API_KEY");
 $postFields = json_encode([
     'contents' => [
         [
@@ -88,11 +88,10 @@ curl_close($ch);
 // Gemini 응답 처리
 $recommendedIds = [];
 $result = json_decode($response, true);
-if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-    $text = $result['candidates'][0]['content']['parts'][0]['text'];
-    $parsed = json_decode($text, true);
-    if (is_array($parsed)) $recommendedIds = $parsed;
-}
+$text = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+$cleaned = trim(preg_replace('/^```json|```$/m', '', trim($text)));
+$parsed = json_decode($cleaned, true);
+if (is_array($parsed)) $recommendedIds = $parsed;
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +106,7 @@ if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
     <a href="dashboard.php">Dashboard</a>
     <a href="mypage.php">내 solved.ac 정보</a>
     <a href="recommend.php">문제 추천</a>
-    <a href="graph">자료구조 시각화</a>
+    <a href="graph.php">자료구조 시각화</a>
     <a href="logout.php">로그아웃</a>
 </nav>
 

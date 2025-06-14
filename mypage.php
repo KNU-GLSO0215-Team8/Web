@@ -79,7 +79,6 @@ foreach ($recentProblems as $problemId) {
     <a href="graph.php">자료구조 시각화</a>
     <a href="logout.php">로그아웃</a>
 </nav>
-
 <div class="container">
     <h2><?php echo htmlspecialchars($username); ?> 님의 solved.ac 정보</h2>
 

@@ -76,7 +76,6 @@
     <a href="graph.php">자료구조 시각화</a>
     <a href="logout.php">로그아웃</a>
 </nav>
-
 <div id="toolbar">
     <button onclick="addNode()">노드 추가</button>
     <button id="connectBtn" onclick="toggleConnectMode()">노드 연결</button>

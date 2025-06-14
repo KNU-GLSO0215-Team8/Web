@@ -39,4 +39,3 @@ $stmt->close();
 </body>
 
 </html>
-
